@@ -2,15 +2,17 @@
 
 ## Frontend
 
-### Bootstrap themes for consideration
+I'm using Dash Bootstrap Components (dbc) as the main building blocks.
 
- 1. Quartz
- 2. Darkly
- 3. Flatly - Dark mode
- 4. Litera - Dark mode
- 5. Minty - Dark mode
+### Bootstrap theme
+
+Quartz
+
+### Layout
+
+I'm using the `dbc.Stack` for a horizontally scrolling site, and `dbc.Card` for contextual elements.
  
- ## Data set
+## Data set
 
 https://www.kaggle.com/datasets/abdallahwagih/books-dataset/
 
