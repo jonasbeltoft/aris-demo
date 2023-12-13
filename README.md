@@ -16,9 +16,9 @@ https://www.kaggle.com/datasets/abdallahwagih/books-dataset/
 
  I've chosen a dataset about books. The headers include author, title, thumbnail (link), rating, number of pages etc.
 
- I plan to show graphs of crossing some of the different columnms, to maybe conclude on what genre/length/etc. might be most popular, based on rating.
+ I plan to show graphs of crossing some of the different columns, to maybe conclude on what genre/length/etc. might be most popular, based on rating.
 
- I'm going to make use of the MongoDB to fetch all the images locally, and serving them from the DB, instead of as links, like they are in the original data. *Why? to make sure I demonstrate image storage & transfer.*
+ I'm going to fetch all the images and save them in the MongoDB locally, and serving them from there instead of as links, like they are in the original data. *Why? to make sure I demonstrate image storage & transfer.*
 
 ## Serving / Hosting
 
