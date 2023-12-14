@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 
 app = dash.Dash(external_stylesheets=[dbc.themes.QUARTZ])
 
+# TODO OAuth basic_auth
+
 app.layout = dbc.Container(
     [
         dbc.Stack(

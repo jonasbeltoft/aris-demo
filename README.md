@@ -11,7 +11,12 @@ Quartz
 ### Layout
 
 I'm using the `dbc.Stack` for a horizontally scrolling site, and `dbc.Card` for contextual elements.
- 
+
+### Future considerations
+
+- If time constraints allows it, I'll add several pages by routing.
+- OAuth by using Flask `LoginManager`.
+
 ## Data set
 
 https://www.kaggle.com/datasets/abdallahwagih/books-dataset/
