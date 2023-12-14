@@ -29,6 +29,11 @@ I plan to show graphs of crossing some of the different columns, to maybe conclu
 
 I'm going to fetch all the images and save them in the MongoDB locally, and serving them from there instead of as links, like they are in the original data. *Why? to make sure I demonstrate image storage & transfer.*
 
+the __poster_scraper.py__ takes a semi long time to execute, because it isn't threaded for optimum downloading.
+Therefore I've added a print statement to it, that updates every 20 downloads. It looks like this:
+
+```1600 / 6810  | =======                        | when_the_lion_feeds_2006.0.jpg```
+
 ## Serving / Hosting
 
 I plan to containerize both front- and backend, using __Docker__ and __Dockercompose__, which is now a part of docker.
