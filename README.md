@@ -21,11 +21,13 @@ I'm using the `dbc.Stack` for a horizontally scrolling site, and `dbc.Card` for 
 
 https://www.kaggle.com/datasets/abdallahwagih/books-dataset/
 
- I've chosen a dataset about books. The headers include author, title, thumbnail (link), rating, number of pages etc.
+Save data set in `data/data.csv`. The scraper saves images in `data/images/*.jpg`.
 
- I plan to show graphs of crossing some of the different columns, to maybe conclude on what genre/length/etc. might be most popular, based on rating.
+I've chosen a dataset about books. The headers include author, title, thumbnail (link), rating, number of pages etc.
 
- I'm going to fetch all the images and save them in the MongoDB locally, and serving them from there instead of as links, like they are in the original data. *Why? to make sure I demonstrate image storage & transfer.*
+I plan to show graphs of crossing some of the different columns, to maybe conclude on what genre/length/etc. might be most popular, based on rating.
+
+I'm going to fetch all the images and save them in the MongoDB locally, and serving them from there instead of as links, like they are in the original data. *Why? to make sure I demonstrate image storage & transfer.*
 
 ## Serving / Hosting
 
