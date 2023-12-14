@@ -6,11 +6,11 @@ import os
 import re
 
 # Create the 'images' folder if it doesn't exist
-if not os.path.exists('data/images'):
-    os.makedirs('data/images')
+if not os.path.exists('backend/data/images'):
+    os.makedirs('backend/data/images')
 
 # Read the CSV file into a pandas DataFrame
-df = pd.read_csv('data/data.csv')
+df = pd.read_csv('backend/data/data.csv')
 MAX_ROWS = df.shape[0]
 
 regex = re.compile('[^0-9a-zA-Z ]+')
@@ -50,7 +50,7 @@ for index, row in df.iterrows():
         prev_put_string_len = len(out_string)
 
 for i, file in enumerate(files):
-    with open('data/images/'+file[0], 'wb') as f:
+    with open('backend/data/images/'+file[0], 'wb') as f:
         f.write(file[1])
         
     # Print progress to console
@@ -60,4 +60,4 @@ for i, file in enumerate(files):
         prev_put_string_len = len(out_string)
 
 # Save the updated DataFrame to the CSV file
-df.to_csv('data/data.csv', index=False)
+df.to_csv('backend/data/data.csv', index=False)

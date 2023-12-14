@@ -160,8 +160,8 @@ cython_debug/
 #.idea/
 
 
-data/*
-!data/.gitkeep 
-!data/images/
-data/images/*
-!data/images/.gitkeep
+backend/data/*
+!backend/data/.gitkeep 
+!backend/data/images/
+backend/data/images/*
+!backend/data/images/.gitkeep
