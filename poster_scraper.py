@@ -1,5 +1,5 @@
 import math
-import concurrent.futures
+import base64
 import pandas as pd
 import requests
 import os
@@ -33,7 +33,10 @@ for index, row in df.iterrows():
     # Download and save the image in the DataFrame as a blob of bytes
     try:
         response = requests.get(thumbnail_url)
-        df.at[index, 'thumbnail'] = response.content
+        if response.status_code == 200:
+            df.at[index, 'thumbnail'] = base64.b64encode(response.content)
+        else:
+            df.at[index, 'thumbnail'] = '' 
     except:
         df.at[index, 'thumbnail'] = ''
 
