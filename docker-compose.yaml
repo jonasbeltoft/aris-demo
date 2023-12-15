@@ -3,12 +3,9 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb_container
-    environment:
-      - CONN_STR=mongodb://user:pass@mongodb
-    ports:
-      - "27017:27017"
+    restart: always
     volumes:
-      - ./backend/data/db:/data/db
+      - mongodb_vol:/data/db
 
   dash_app:
     build:
@@ -16,9 +13,13 @@ services:
       dockerfile: Dockerfile
     container_name: dash_app_container
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGODB_URI=mongodb://mongodb:27017
+      - DB_NAME=books_db
+      - NAME=SomeName
     ports:
       - "8080:8080"
     depends_on:
       - mongodb
+
+volumes:
+  mongodb_vol: ./backend/data/db
