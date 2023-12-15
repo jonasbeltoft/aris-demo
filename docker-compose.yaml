@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    environment:
+      - CONN_STR=mongodb://user:pass@mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./backend/data/db:/data/db
+
+  dash_app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dash_app_container
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
