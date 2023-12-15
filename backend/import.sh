@@ -1,3 +1,3 @@
 #! /bin/bash
 
-mongoimport --host mongodb --db test --collection books --type csv --file /mongo-seed/data.csv --headerline
+mongoimport --db my_db --collection books --type csv --file /app/data/data.csv --headerline --ignoreBlanks

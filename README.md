@@ -38,6 +38,13 @@ Therefore I've added a print statement to it, that updates every 20 downloads. I
 
 I plan to containerize both front- and backend, using __Docker__ and __Dockercompose__, which is now a part of docker.
 
+## Setup
+
+- To start the services run `docker compose up`.
+	- Make sure files are not created as root user, otherwise use chmod to enable read/write.
+- exec into the mongodb container to run the import.sh file, to import the data from csv into the db.
+	- The reason this *can't* be done as CMD argument, is that the mongodb service has to be fully running first.
+
 ## Case
 
 Lav en simpel hjemmeside i __Python__ med __Dash__ frameworket, hvor brugeren skal logge ind med følgende credentials:

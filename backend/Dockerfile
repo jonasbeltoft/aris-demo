@@ -1,6 +1,4 @@
-FROM mongo:3.2.6
-RUN mkdir -p /app/data
+FROM mongodb/mongodb-community-server:6.0-ubi8
 WORKDIR /app/data
-COPY ./data/data.csv /app/data
-COPY import.sh /app/data
-CMD ["mongod", "&&", "mongoimport", "-db", "test", "-c", "books", "--file", "data.csv", "--headerline"]
+COPY ./data/data.csv .
+COPY import.sh .
