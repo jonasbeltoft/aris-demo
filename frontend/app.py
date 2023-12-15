@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 app = dash.Dash(external_stylesheets=[dbc.themes.QUARTZ])
 
 # TODO OAuth basic_auth
+# TODO Connect mongodb // pymongo https://pymongo.readthedocs.io/en/stable/tutorial.html
 
 app.layout = dbc.Container(
     [

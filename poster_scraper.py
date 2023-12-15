@@ -30,34 +30,28 @@ for index, row in df.iterrows():
     # Generate the filename
     filename = f'{str(title)}_{published_year}.jpg'.lower()
     
-    # Download and save the image
+    # Download and save the image in the DataFrame as a blob of bytes
     try:
         response = requests.get(thumbnail_url)
-        if response.status_code == 200:
-            files.append((filename, response.content))
-        else:
-            filename = ''
+        df.at[index, 'thumbnail'] = response.content
     except:
-        filename = ''
-        
-    # Update the 'thumbnail' column with the new filename
-    df.at[index, 'thumbnail'] = filename
-    
+        df.at[index, 'thumbnail'] = ''
+
     # Print progress to console
     if int(index) % 20 == 0:
         out_string = f"{index : >5} / {MAX_ROWS : <5} | {'=' * (math.floor((int(index) / MAX_ROWS) * 30)) : <30} | {filename}"
         print(f'{out_string}{" " * abs(prev_put_string_len - len(out_string))}', end='\r')
         prev_put_string_len = len(out_string)
 
-for i, file in enumerate(files):
-    with open('backend/data/images/'+file[0], 'wb') as f:
-        f.write(file[1])
+# for i, file in enumerate(files):
+#     with open('backend/data/images/'+file[0], 'wb') as f:
+#         f.write(file[1])
         
-    # Print progress to console
-    if i % 20 == 0:
-        out_string = f"{index : >5} / {len(files) : <5} | {'=' * (math.floor((int(index) / len(files)) * 30)) : <30} | {file[0]}"
-        print(f'{out_string}{" " * abs(prev_put_string_len - len(out_string))}', end='\r')
-        prev_put_string_len = len(out_string)
+#     # Print progress to console
+#     if i % 20 == 0:
+#         out_string = f"{index : >5} / {len(files) : <5} | {'=' * (math.floor((int(index) / len(files)) * 30)) : <30} | {file[0]}"
+#         print(f'{out_string}{" " * abs(prev_put_string_len - len(out_string))}', end='\r')
+#         prev_put_string_len = len(out_string)
 
 # Save the updated DataFrame to the CSV file
 df.to_csv('backend/data/data.csv', index=False)

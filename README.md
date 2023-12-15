@@ -41,7 +41,8 @@ I plan to containerize both front- and backend, using __Docker__ and __Dockercom
 ## Setup
 
 - To start the services run `docker compose up`.
-	- Make sure files are not created as root user, otherwise use chmod to enable read/write.
+	- Make sure files are not created as root user, otherwise use chmod to enable read/write to the db.
+	`sudo chmod -R go+w ./backend/data/db`
 - exec into the mongodb container to run the import.sh file, to import the data from csv into the db.
 	- The reason this *can't* be done as CMD argument, is that the mongodb service has to be fully running first.
 
