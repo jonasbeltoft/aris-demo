@@ -1,11 +1,15 @@
 version: '3'
 services:
   mongodb:
-    image: mongo:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: mongodb_container
     restart: always
+    ports:
+      - '27017:27017'
     volumes:
-      - mongodb_vol:/data/db
+      - ./backend/data/db:/data/db
 
   dash_app:
     build:
@@ -20,6 +24,10 @@ services:
       - "8080:8080"
     depends_on:
       - mongodb
-
-volumes:
-  mongodb_vol: ./backend/data/db
+  # mongo_seed:
+  #   image: mongo:3.2.6
+  #   links:
+  #     - mongodb
+  #   volumes:
+  #     - .backend/data:/mongo-seed
+  #   command: /mongo-seed/import.sh
