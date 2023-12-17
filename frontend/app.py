@@ -38,6 +38,11 @@ app.layout = dbc.Container(
 			],
 			gap=3
 		),
+        dcc.Loading(
+            id="loading",
+            type="dot",
+            children=html.Div(id="loading-output")
+        ),
         dbc.Stack(
 			gap=3,
 			id="result-stack",
@@ -57,45 +62,53 @@ def get_value_from_object(obj: any, value: str):
 
 @callback(
 	Output('result-stack', 'children'),
+	Output('loading-output', 'children'),
 	Output('search-input', 'valid'),
 	Output('search-input', 'invalid'),
 	Input('get-entries-btn', 'n_clicks'),
 	State('search-input', 'value'))
 def get_entries(click, search_string):
 	if click is None or click == 0:
-		return []
-	if search_string is None or len(search_string) == 0:
-		return [], False, True
+		return [], '', None, None
+	if search_string is None or len(search_string.strip()) == 0:
+		return [], '', False, True
 	try:
-		data = list(books_db.find({'title': {'$regex': search_string, '$options': 'i'}}, ['title', 'authors','published_year','average_rating','description']))
+		data = list(books_db.find(limit=100, filter={'title': {'$regex': search_string, '$options': 'i'}}, projection=['title', 'authors','published_year','average_rating','description', 'thumbnail']))
 	except:
-		return []
+		return [], '', None, None
 		# Should show error message to user
   
-	print(data)
 	return_data = []
 	for row in data:
-		return_data.append(dbc.Card([
-            html.H4(f"{get_value_from_object(row,'title')}", className="card-title"),
-            html.Div([
-            	html.H6(f"{get_value_from_object(row,'authors')} - {str(get_value_from_object(row,'published_year')).split('.')[0]}",
-                     className="card-subtitle",
-                     style={'width': 'fit-content'}
-                ),
-                html.H6([
-                    html.I(className="fas fa-star me-1", style={'color': '#FFCD3D'}),
-                    f"{get_value_from_object(row, 'average_rating')}"
-                    ],
-                	className="card-subtitle")
-            	],
-				className="d-flex flex-row gap-2"
-            ),
-			html.P(f"{get_value_from_object(row, 'description')}",
-                className="card-text",
-            )],
-			body=True
-		))
-	return return_data, True, False
+		return_data.append(dbc.Card(dbc.CardBody([
+			html.Div([
+				html.H4(f"{get_value_from_object(row,'title')}", className="card-title"),
+				html.Div([
+					html.H6(f"{get_value_from_object(row,'authors').replace(';', ' & ')} - {str(get_value_from_object(row,'published_year')).split('.')[0]}",
+						className="card-subtitle",
+						style={'width': 'fit-content'}
+					),
+					html.H6([
+						html.I(className="fas fa-star me-1", style={'color': '#FFCD3D'}),
+						f"{get_value_from_object(row, 'average_rating')}"
+						],
+						className="card-subtitle")
+					],
+					className="d-flex flex-row gap-2"
+				),
+				html.P(f"{get_value_from_object(row, 'description')}",
+					className="card-text",
+				)
+			]),
+			html.Img(src="data:image/jpg;base64," + get_value_from_object(row, 'thumbnail')[2:-1],
+				alt="Poster Image",
+				height="100%",
+				style={'min-height': '200px', 'max-height': '300px'}
+            )
+		],
+		className="d-flex flex-row justify-content-between gap-3"
+	)))
+	return return_data, '', True, False
 
 @callback(
     Output('count-text', 'children'),
