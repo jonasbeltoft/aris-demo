@@ -3,9 +3,9 @@ import dash_bootstrap_components as dbc
 from pymongo import MongoClient
 from os import environ
 import pandas as pd
+import plotly.express as px
 
 # TODO OAuth basic_auth
-# TODO Connect mongodb // pymongo https://pymongo.readthedocs.io/en/stable/tutorial.html
 
 # Init dash app
 app = dash.Dash(external_stylesheets=[dbc.themes.QUARTZ, dbc.icons.FONT_AWESOME], update_title=None)
@@ -27,6 +27,50 @@ app.layout = dbc.Container(
 			[
 				dbc.Card(
 					[
+						html.H4("Distribution of Published Years", className="card-title"),
+						html.Div(id="year-dist-result"),
+						dcc.Loading(
+								type="default",
+								children=html.Div(id="loading-output-year-hist")
+						),
+      				],
+					body=True
+				),
+				dbc.Card(
+					[
+						html.H4("Correlation between Average Rating and Number of Pages", className="card-title"),
+						html.Div(id="rating-corr-result"),
+						dcc.Loading(
+								type="default",
+								children=html.Div(id="loading-output-rating-corr")
+						),
+      				],
+					body=True
+				),
+				dbc.Card(
+					[
+						html.H4("Top Categories by Amount", className="card-title"),
+						html.Div(id="categories-result"),
+						dcc.Loading(
+								type="default",
+								children=html.Div(id="loading-output-categories")
+						),
+      				],
+					body=True
+				),
+				dbc.Card(
+					[
+						html.H4("Average rating per year", className="card-title"),
+						html.Div(id="avg-rating-result"),
+						dcc.Loading(
+								type="default",
+								children=html.Div(id="loading-output-avg-rating")
+						),
+      				],
+					body=True
+				),
+    			dbc.Card(
+					[
 						html.H4(["Entries in Books database: ",
 							html.Span(className="card-text", id="count-text"),
                			], className="card-title, m-0"),
@@ -39,7 +83,6 @@ app.layout = dbc.Container(
 			gap=3
 		),
         dcc.Loading(
-            id="loading",
             type="dot",
             children=html.Div(id="loading-output")
         ),
@@ -51,6 +94,83 @@ app.layout = dbc.Container(
 	],
     class_name="d-flex flex-column gap-3 pt-3",
 )
+
+
+@callback(
+    Output("avg-rating-result", "children"),
+    Output("loading-output-avg-rating", "children"),
+    Input('url', 'pathname'))
+def year_dist(url):
+	try:
+		df = pd.DataFrame(list(books_db.find(projection=['published_year', 'average_rating'])))
+		
+  		# Group by published year and calculate the average rating for each year
+		average_rating_by_year = df.groupby('published_year')['average_rating'].mean().reset_index()
+
+		# Create a line plot
+		fig = px.line(average_rating_by_year, x='published_year', y='average_rating',
+            template="plotly_dark", color_discrete_sequence =['#83c79a'])
+		fig.update_layout(xaxis_title='Published Year', yaxis_title='Average Rating')
+		return dcc.Graph(figure=fig), ''
+	except:
+		fig = px.scatter()
+		return dcc.Graph(figure=fig), ''
+
+@callback(
+    Output("categories-result", "children"),
+    Output("loading-output-categories", "children"),
+    Input('url', 'pathname'))
+def year_dist(url):
+	try:
+		df = pd.DataFrame(list(books_db.find(projection=['categories'])))
+		
+  		# Make the figure
+		top_categories = df['categories'].str.split(', ', expand=True).stack().value_counts().nlargest(10).reset_index()
+		top_categories.columns = ['Category', 'Book Count']
+		# Flip the plot
+		top_categories = top_categories.iloc[::-1]
+
+		fig = px.bar(top_categories, y='Book Count', x='Category', orientation='v',
+			template="plotly_dark", color_discrete_sequence =['#83c79a'],
+            labels={'Book Count': 'Number of Books', 'Category': 'Categories'})
+		return dcc.Graph(figure=fig), ''
+	except:
+		fig = px.scatter()
+		return dcc.Graph(figure=fig), ''
+
+@callback(
+    Output("rating-corr-result", "children"),
+    Output("loading-output-rating-corr", "children"),
+    Input('url', 'pathname'))
+def year_dist(url):
+	try:
+		df = pd.DataFrame(list(books_db.find(projection=['num_pages','average_rating'])))
+		
+  		# Make the figure
+		fig = px.scatter(df, x='average_rating', y='num_pages',
+			template="plotly_dark", color_discrete_sequence =['#83c79a'],
+            labels={'average_rating': 'Average Rating', 'num_pages': 'Number of Pages'})
+		return dcc.Graph(figure=fig), ''
+	except:
+		fig = px.scatter()
+		return dcc.Graph(figure=fig), ''
+
+@callback(
+    Output("year-dist-result", "children"),
+    Output("loading-output-year-hist", "children"),
+    Input('url', 'pathname'))
+def year_dist(url):
+	try:
+		df = pd.DataFrame(list(books_db.find(projection=['published_year'])))
+		# Make the figure
+		fig = px.histogram(df, x='published_year', nbins=20,
+			template="plotly_dark", color_discrete_sequence =['#83c79a']
+   		)
+		fig.update_layout(xaxis_title='Published Year', yaxis_title='Number of Books')
+		return dcc.Graph(figure=fig), ''
+	except:
+		fig = px.histogram()
+		return dcc.Graph(figure=fig), ''
 
 def get_value_from_object(obj: any, value: str):
     res = ''
@@ -77,7 +197,8 @@ def get_entries(click, search_string):
 	except:
 		return [], '', None, None
 		# Should show error message to user
-  
+
+	# Render output
 	return_data = []
 	for row in data:
 		return_data.append(dbc.Card(dbc.CardBody([
@@ -110,10 +231,11 @@ def get_entries(click, search_string):
 	)))
 	return return_data, '', True, False
 
+# Get amount of entries in db on site load
 @callback(
     Output('count-text', 'children'),
 	Input('url', 'pathname'))
-def get_count(click):
+def get_count(url):
 	return books_db.count_documents({})
 
 

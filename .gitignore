@@ -161,7 +161,7 @@ cython_debug/
 
 
 backend/data/*
-!backend/data/.gitkeep 
+!backend/data/data_imutable.csv
 !backend/data/images/
 backend/data/images/*
 !backend/data/images/.gitkeep
