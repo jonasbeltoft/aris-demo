@@ -9,24 +9,17 @@ services:
       - '27017:27017'
     volumes:
       - ./backend/data/db:/data/db
-  # dash_app:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: dash_app_container
-  #   environment:
-  #     - MONGODB_URI=mongodb://mongodb:27017
-  #     - DB_NAME=books_db
-  #     - NAME=SomeName
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mongodb
-  #
-  # mongo_seed:
-  #   image: mongo:3.2.6
-  #   links:
-  #     - mongodb
-  #   volumes:
-  #     - .backend/data:/mongo-seed
-  #   command: /mongo-seed/import.sh
+
+  dash_app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dash_app_container
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - USERNAME=jonas
+      - PASSWORD=admin2023
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb

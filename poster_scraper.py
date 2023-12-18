@@ -5,12 +5,8 @@ import requests
 import os
 import re
 
-# Create the 'images' folder if it doesn't exist
-if not os.path.exists('backend/data/images'):
-    os.makedirs('backend/data/images')
-
 # Read the CSV file into a pandas DataFrame
-df = pd.read_csv('backend/data/data.csv')
+df = pd.read_csv('backend/data/data_imutable.csv')
 MAX_ROWS = df.shape[0]
 
 regex = re.compile('[^0-9a-zA-Z ]+')

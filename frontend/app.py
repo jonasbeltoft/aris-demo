@@ -4,8 +4,7 @@ from pymongo import MongoClient
 from os import environ
 import pandas as pd
 import plotly.express as px
-
-# TODO OAuth basic_auth
+import dash_auth
 
 # Init dash app
 app = dash.Dash(external_stylesheets=[dbc.themes.QUARTZ, dbc.icons.FONT_AWESOME], update_title=None)
@@ -16,6 +15,18 @@ try:
 	mongodb_url = environ['MONGODB_URI']
 except:
     mongodb_url = 'mongodb://localhost:27017'
+
+try:
+    USERNAME = environ['USERNAME']
+    PASSWORD = environ['PASSWORD']
+except:
+    USERNAME = ''
+    PASSWORD = ''
+    
+auth = dash_auth.BasicAuth(
+    app,
+    {USERNAME: PASSWORD}
+)
     
 mongo_client = MongoClient(mongodb_url)
 books_db = mongo_client['my_db']['books']
