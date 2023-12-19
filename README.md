@@ -7,7 +7,7 @@
 	- Make sure files are not created as root user, otherwise use chmod to enable read/write to the db.
 	`sudo chmod -R go+w ./backend/data/db`
 - ``exec`` into the mongodb container and run the import.sh file, to import the data from data.csv into the db.
-	- `docker exec mongodb_container bash -c "./import.sh`
+	- `docker exec mongodb_container bash -c "./import.sh"`
 	- The reason this *can't* be done as CMD argument, is that the mongodb service has to be fully running first. 
 - The website should now be running on http://localhost:8080/
 
